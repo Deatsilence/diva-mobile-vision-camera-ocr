@@ -56,3 +56,4 @@ export function scanOCR(frame: Frame): OCRFrame {
 export function mrzParse(initialLines: string[]) {
   return parseMRZ(initialLines);
 }
+
