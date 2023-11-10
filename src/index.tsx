@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
 import type { Frame } from 'react-native-vision-camera';
+import {parseMRZ} from '../util/mrzParser';
 
-export type BoundingFrame = {
+type BoundingFrame = {
   x: number;
   y: number;
   width: number;
@@ -9,15 +10,15 @@ export type BoundingFrame = {
   boundingCenterX: number;
   boundingCenterY: number;
 };
-export type Point = { x: number; y: number };
+type Point = { x: number; y: number };
 
-export type TextElement = {
+type TextElement = {
   text: string;
   frame: BoundingFrame;
   cornerPoints: Point[];
 };
 
-export type TextLine = {
+type TextLine = {
   text: string;
   elements: TextElement[];
   frame: BoundingFrame;
@@ -25,7 +26,7 @@ export type TextLine = {
   cornerPoints: Point[];
 };
 
-export type TextBlock = {
+type TextBlock = {
   text: string;
   lines: TextLine[];
   frame: BoundingFrame;
@@ -33,7 +34,7 @@ export type TextBlock = {
   cornerPoints: Point[];
 };
 
-export type Text = {
+type Text = {
   text: string;
   blocks: TextBlock[];
 };
@@ -50,4 +51,8 @@ export function scanOCR(frame: Frame): OCRFrame {
   'worklet';
   // @ts-ignore
   return __scanOCR(frame);
+}
+
+export function mrzParse(initialLines: string[]) {
+  return parseMRZ(initialLines);
 }
