@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import type { Frame } from 'react-native-vision-camera';
-import {parseMRZ} from '../util/mrzParser';
+import {parseMRZ} from './util/mrzParser';
 
 export type BoundingFrame = {
   x: number;
