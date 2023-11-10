@@ -1,7 +1,7 @@
 // logging import and setup
 import {ListItemData} from './listItemData';
 
-const countryIsoJson = require('../../constants/CountryIsoCodes.json');
+const countryIsoJson = require('../../lib/constants/CountryIsoCodes.json');
 
 /**
  * It takes a string, and returns a number
