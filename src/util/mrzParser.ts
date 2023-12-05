@@ -48,13 +48,9 @@ export const parseMRZ = (initialLines: string[]) => {
     firstInitialLastLine &&
     secondInitialLastLine
   ) {
+   
     // return undefined if a double left angle bracket character is found in either last line, or second to last line.
-    if (
-      firstInitialLastLine.indexOf('«') !== -1 ||
-      secondInitialLastLine.indexOf('«') !== -1
-    ) {
-      return undefined;
-    }
+
     // remove all empty spaces in each line, capitalize all letters, change all '$' to 'S'
     initialLines.forEach((line: string) => {
       while (line.indexOf(' ') !== -1) {
@@ -63,6 +59,9 @@ export const parseMRZ = (initialLines: string[]) => {
       line = line.toUpperCase();
       while (line.indexOf('$') !== -1) {
         line = line.replace('$', 'S');
+      }
+      while (line.indexOf('«') !== -1) {
+        line = line.replace('«', '<');
       }
       // MLKIT sometimes add a new line character when it finds a new line instead of separating the lines into different elements.
       while (line.indexOf('\n') !== -1) {
@@ -76,7 +75,7 @@ export const parseMRZ = (initialLines: string[]) => {
     for (let i = 1; i < lines.length; i++) {
       const currentLine = lines[i];
       const lastLine = lines[i - 1];
-      if (currentLine && lastLine) {
+      if (currentLine && lastLine) {  
         if (
           (currentLine.length > 42 &&
             currentLine.length < 46 &&
@@ -386,12 +385,13 @@ const extractDateOfExpirationFromLine = (
   // Confirm checkSum for date of expiration
   let expDateCheckSum = checkSum(
     twoDigitYearOfExpiration +
-      twoDigitMonthOfExpiration +
-      twoDigitDayOfExpiration,
-  );
-  if (expDateCheckSum === parseInt(line.charAt(startingIndex + 6), 10)) {
-    return docExpirationDate;
-  }
+    twoDigitMonthOfExpiration +
+    twoDigitDayOfExpiration,
+    );
+    if (expDateCheckSum === parseInt(line.charAt(startingIndex + 6), 10)) {
+      return docExpirationDate;
+    }
+
   return undefined;
 };
 
@@ -425,11 +425,13 @@ const extractDateOfBirthFromLine = (startingIndex: number, line: string) => {
   let dob = `${fullYearOfBirth}-${twoDigitMonthOfBirth}-${twoDigitDayOfBirth}`;
   // ensure date of birth is a valid date. if not, return undefined
   if (new Date(dob).toString() === 'Invalid Date') {
+
     return undefined;
   }
   if (dobCheckSum === parseInt(line.charAt(startingIndex + 6), 10)) {
     return dob;
   }
+
   return undefined;
 };
 
@@ -442,9 +444,9 @@ const extractDateOfBirthFromLine = (startingIndex: number, line: string) => {
 const extractNamesFromLine = (startingIndex: number, line: string) => {
   let angleBracketCount = 0;
   let lastNamesExtracted = false;
-  let lastNames = [];
+  let lastNames : string[] = [];
   let lastName = '';
-  let givenNames = [];
+  let givenNames : string[] = [];
   let givenName = '';
   for (let i = startingIndex; i < line.length; i++) {
     if (line.charAt(i) !== '<' && !lastNamesExtracted) {
